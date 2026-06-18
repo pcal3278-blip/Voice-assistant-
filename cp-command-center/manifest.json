@@ -1,0 +1,31 @@
+{
+  "name": "CP Command Center",
+  "short_name": "CP Command",
+  "description": "A private iPhone-first personal dashboard PWA for daily notes, commute, home, MPG, wildlife, retirement, work, health, vacation, and settings.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f6f3eb",
+  "theme_color": "#12201f",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 512 512%22%3E%3Crect width=%22512%22 height=%22512%22 fill=%22%2312201f%22/%3E%3Crect x=%2264%22 y=%2264%22 width=%22384%22 height=%22384%22 rx=%2272%22 fill=%22%23fffdf7%22/%3E%3Ctext x=%22118%22 y=%22165%22 font-family=%22Arial,sans-serif%22 font-size=%2288%22 font-weight=%22700%22 fill=%22%2312201f%22%3ECP%3C/text%3E%3Crect x=%22128%22 y=%22212%22 width=%22256%22 height=%2238%22 fill=%22%23315f8c%22/%3E%3Crect x=%22128%22 y=%22286%22 width=%22196%22 height=%2238%22 fill=%22%231f7a68%22/%3E%3Crect x=%22128%22 y=%22360%22 width=%22288%22 height=%2238%22 fill=%22%23986f19%22/%3E%3C/svg%3E",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 512 512%22%3E%3Crect width=%22512%22 height=%22512%22 fill=%22%2312201f%22/%3E%3Crect x=%2264%22 y=%2264%22 width=%22384%22 height=%22384%22 rx=%2272%22 fill=%22%23fffdf7%22/%3E%3Ctext x=%22118%22 y=%22165%22 font-family=%22Arial,sans-serif%22 font-size=%2288%22 font-weight=%22700%22 fill=%22%2312201f%22%3ECP%3C/text%3E%3Crect x=%22128%22 y=%22212%22 width=%22256%22 height=%2238%22 fill=%22%23315f8c%22/%3E%3Crect x=%22128%22 y=%22286%22 width=%22196%22 height=%2238%22 fill=%22%231f7a68%22/%3E%3Crect x=%22128%22 y=%22360%22 width=%22288%22 height=%2238%22 fill=%22%23986f19%22/%3E%3C/svg%3E",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org%22 viewBox=%220 0 512 512%22%3E%3Crect width=%22512%22 height=%22512%22 fill=%22%2312201f%22/%3E%3Crect x=%2264%22 y=%2264%22 width=%22384%22 height=%22384%22 rx=%2272%22 fill=%22%23fffdf7%22/%3E%3Ctext x=%22118%22 y=%22165%22 font-family=%22Arial,sans-serif%22 font-size=%2288%22 font-weight=%22700%22 fill=%22%2312201f%22%3ECP%3C/text%3E%3Crect x=%22128%22 y=%22212%22 width=%22256%22 height=%2238%22 fill=%22%23315f8c%22/%3E%3Crect x=%22128%22 y=%22286%22 width=%22196%22 height=%2238%22 fill=%22%231f7a68%22/%3E%3Crect x=%22128%22 y=%22360%22 width=%22288%22 height=%2238%22 fill=%22%23986f19%22/%3E%3C/svg%3E",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}
