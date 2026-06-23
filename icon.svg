@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="CP Reader icon">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1020"/>
+      <stop offset="0.55" stop-color="#172554"/>
+      <stop offset="1" stop-color="#312e81"/>
+    </linearGradient>
+    <linearGradient id="wave" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#7dd3fc"/>
+      <stop offset="1" stop-color="#c4b5fd"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <circle cx="256" cy="256" r="178" fill="none" stroke="rgba(255,255,255,.16)" stroke-width="20"/>
+  <path d="M126 272c31-42 63-42 94 0s63 42 94 0 62-42 93 0" fill="none" stroke="url(#wave)" stroke-width="30" stroke-linecap="round"/>
+  <path d="M153 336c22-25 44-25 66 0s44 25 66 0 44-25 66 0" fill="none" stroke="#e0f2fe" stroke-width="18" stroke-linecap="round" opacity=".9"/>
+  <text x="256" y="210" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif" font-size="102" font-weight="900" fill="#eef3ff" letter-spacing="-6">CP</text>
+</svg>
