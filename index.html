@@ -1,0 +1,693 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b1020">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="CP Reader">
+  <title>CP Human Voice Reader</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #070a12;
+      --card: #101827;
+      --card2: #162033;
+      --text: #eef3ff;
+      --muted: #a9b6d3;
+      --accent: #7dd3fc;
+      --accent2: #c4b5fd;
+      --danger: #fca5a5;
+      --ok: #86efac;
+      --border: rgba(255,255,255,.13);
+      --shadow: 0 18px 50px rgba(0,0,0,.35);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 15% 0%, rgba(125,211,252,.18), transparent 32%),
+        radial-gradient(circle at 85% 8%, rgba(196,181,253,.18), transparent 34%),
+        linear-gradient(180deg, #070a12 0%, #0b1020 48%, #070a12 100%);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", system-ui, sans-serif;
+      padding: env(safe-area-inset-top) 14px calc(22px + env(safe-area-inset-bottom));
+    }
+
+    .app {
+      width: min(960px, 100%);
+      margin: 0 auto;
+      padding: 16px 0 28px;
+    }
+
+    header {
+      padding: 14px 4px 12px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(1.7rem, 8vw, 3.2rem);
+      letter-spacing: -0.05em;
+      line-height: .95;
+    }
+
+    .tagline {
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.45;
+      margin: 0;
+    }
+
+    .version {
+      display: inline-flex;
+      margin-top: 12px;
+      padding: 8px 11px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: rgba(255,255,255,.06);
+      color: var(--accent);
+      font-weight: 800;
+      font-size: .82rem;
+      letter-spacing: .04em;
+    }
+
+    .grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .card {
+      background: rgba(16,24,39,.86);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 15px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    label {
+      display: block;
+      color: var(--muted);
+      font-size: .88rem;
+      font-weight: 800;
+      margin: 0 0 8px;
+      letter-spacing: .02em;
+    }
+
+    textarea, select, input[type="range"] {
+      width: 100%;
+      max-width: 100%;
+    }
+
+    textarea, select {
+      border: 1px solid var(--border);
+      background: rgba(7,10,18,.84);
+      color: var(--text);
+      border-radius: 16px;
+      outline: none;
+      font: inherit;
+    }
+
+    textarea {
+      min-height: 310px;
+      resize: vertical;
+      padding: 14px;
+      line-height: 1.55;
+      font-size: 1rem;
+    }
+
+    textarea:focus, select:focus {
+      border-color: rgba(125,211,252,.7);
+      box-shadow: 0 0 0 4px rgba(125,211,252,.12);
+    }
+
+    .row {
+      display: grid;
+      gap: 12px;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    button {
+      min-height: 50px;
+      border: 0;
+      border-radius: 16px;
+      padding: 12px 14px;
+      color: #07111f;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      font-weight: 900;
+      font-size: 1rem;
+      letter-spacing: -.01em;
+      touch-action: manipulation;
+    }
+
+    button.secondary {
+      color: var(--text);
+      background: rgba(255,255,255,.09);
+      border: 1px solid var(--border);
+    }
+
+    button.danger {
+      color: #2a0505;
+      background: var(--danger);
+    }
+
+    button:disabled {
+      opacity: .45;
+      filter: grayscale(.4);
+    }
+
+    select {
+      min-height: 48px;
+      padding: 0 12px;
+    }
+
+    .sliders {
+      display: grid;
+      gap: 12px;
+    }
+
+    .sliderLine {
+      display: grid;
+      gap: 6px;
+    }
+
+    .sliderTop {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      color: var(--muted);
+      font-size: .9rem;
+      font-weight: 750;
+    }
+
+    input[type="range"] { accent-color: var(--accent); }
+
+    .progressWrap {
+      display: grid;
+      gap: 10px;
+    }
+
+    .bar {
+      height: 15px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(255,255,255,.09);
+      border: 1px solid var(--border);
+    }
+
+    .barFill {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      transition: width .2s ease;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 9px;
+    }
+
+    .stat {
+      background: rgba(255,255,255,.07);
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      padding: 10px;
+      min-height: 68px;
+    }
+
+    .stat span {
+      display: block;
+      color: var(--muted);
+      font-size: .75rem;
+      font-weight: 850;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    .stat strong {
+      display: block;
+      margin-top: 5px;
+      font-size: 1.1rem;
+    }
+
+    .status {
+      margin: 0;
+      line-height: 1.45;
+      color: var(--muted);
+    }
+
+    .status strong { color: var(--text); }
+    .ok { color: var(--ok); }
+    .warn { color: #fde68a; }
+
+    .note {
+      border-left: 4px solid var(--accent);
+      padding: 10px 12px;
+      background: rgba(125,211,252,.08);
+      border-radius: 14px;
+      color: var(--muted);
+      line-height: 1.45;
+      font-size: .94rem;
+    }
+
+    .small {
+      font-size: .83rem;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    @media (min-width: 760px) {
+      .grid.two { grid-template-columns: 1.2fr .8fr; align-items: start; }
+      .controls { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      textarea { min-height: 560px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header>
+      <h1>CP Human Voice Reader</h1>
+      <p class="tagline">Paste a train reader or sleep reader, choose the clearest voice available on your iPhone, press Play once, and let it continue through safe chunks.</p>
+      <div class="version">CP HUMAN VOICE READER 2026-06-23</div>
+    </header>
+
+    <section class="grid two">
+      <div class="card">
+        <label for="scriptText">Reader script</label>
+        <textarea id="scriptText" spellcheck="true" placeholder="Paste your long train reader or sleep reader here. For best results, use plain paragraphs and avoid unusual symbols."></textarea>
+        <p class="small" id="textCount">0 words · 0 characters</p>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <div class="controls">
+            <button id="playBtn">Play</button>
+            <button id="pauseBtn" class="secondary">Pause</button>
+            <button id="resumeBtn" class="secondary">Resume</button>
+            <button id="stopBtn" class="danger">Stop</button>
+            <button id="saveBtn" class="secondary">Save Script</button>
+            <button id="loadBtn" class="secondary">Load Saved</button>
+            <button id="clearBtn" class="secondary">Clear</button>
+          </div>
+        </div>
+
+        <div class="card row">
+          <div>
+            <label for="voiceSelect">Voice selector</label>
+            <select id="voiceSelect">
+              <option value="">Loading voices...</option>
+            </select>
+            <p class="small">Tip: on iPhone, try enhanced or premium iOS voices when available. The app uses the clearest browser voice your device exposes.</p>
+          </div>
+
+          <div class="sliders">
+            <div class="sliderLine">
+              <div class="sliderTop"><span>Speed / rate</span><strong id="rateValue">0.86</strong></div>
+              <input id="rate" type="range" min="0.5" max="1.25" step="0.01" value="0.86">
+            </div>
+            <div class="sliderLine">
+              <div class="sliderTop"><span>Pitch</span><strong id="pitchValue">1.00</strong></div>
+              <input id="pitch" type="range" min="0.7" max="1.3" step="0.01" value="1.00">
+            </div>
+            <div class="sliderLine">
+              <div class="sliderTop"><span>Volume</span><strong id="volumeValue">1.00</strong></div>
+              <input id="volume" type="range" min="0" max="1" step="0.01" value="1.00">
+            </div>
+          </div>
+        </div>
+
+        <div class="card progressWrap">
+          <div class="bar" aria-label="Progress"><div id="barFill" class="barFill"></div></div>
+          <div class="stats">
+            <div class="stat"><span>Chunk</span><strong id="chunkStat">0 / 0</strong></div>
+            <div class="stat"><span>Progress</span><strong id="percentStat">0%</strong></div>
+            <div class="stat"><span>Status</span><strong id="stateStat">Idle</strong></div>
+          </div>
+          <p id="status" class="status"><strong>Ready.</strong> Paste text, choose a voice, then press Play.</p>
+        </div>
+
+        <div class="card">
+          <div class="note">
+            <strong>Premium voice note:</strong> cloud voices such as OpenAI TTS or ElevenLabs can sound more human, but they require a secure backend/proxy. Do not place paid API keys in public GitHub Pages code.
+          </div>
+          <p class="small">Privacy: in this first version, pasted text stays in this browser and localStorage unless you later add a cloud voice service.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const VERSION = 'CP HUMAN VOICE READER 2026-06-23';
+    const STORAGE_KEY = 'cpHumanVoiceReader.v1.script';
+    const SETTINGS_KEY = 'cpHumanVoiceReader.v1.settings';
+    const MAX_CHUNK_LENGTH = 720;
+
+    const els = {
+      text: document.getElementById('scriptText'),
+      textCount: document.getElementById('textCount'),
+      voice: document.getElementById('voiceSelect'),
+      rate: document.getElementById('rate'),
+      pitch: document.getElementById('pitch'),
+      volume: document.getElementById('volume'),
+      rateValue: document.getElementById('rateValue'),
+      pitchValue: document.getElementById('pitchValue'),
+      volumeValue: document.getElementById('volumeValue'),
+      play: document.getElementById('playBtn'),
+      pause: document.getElementById('pauseBtn'),
+      resume: document.getElementById('resumeBtn'),
+      stop: document.getElementById('stopBtn'),
+      save: document.getElementById('saveBtn'),
+      load: document.getElementById('loadBtn'),
+      clear: document.getElementById('clearBtn'),
+      fill: document.getElementById('barFill'),
+      chunkStat: document.getElementById('chunkStat'),
+      percentStat: document.getElementById('percentStat'),
+      stateStat: document.getElementById('stateStat'),
+      status: document.getElementById('status')
+    };
+
+    let voices = [];
+    let chunks = [];
+    let currentIndex = 0;
+    let isPlaying = false;
+    let isStopped = true;
+    let wakeLock = null;
+
+    function normalizeText(text) {
+      return text
+        .replace(/\r/g, '\n')
+        .replace(/[\t ]+/g, ' ')
+        .replace(/\n{3,}/g, '\n\n')
+        .trim();
+    }
+
+    function splitIntoChunks(text) {
+      const clean = normalizeText(text);
+      if (!clean) return [];
+
+      const sentences = clean
+        .replace(/([.!?])\s+(?=[A-Z0-9“"'])/g, '$1|')
+        .split('|')
+        .map(s => s.trim())
+        .filter(Boolean);
+
+      const output = [];
+      let current = '';
+
+      sentences.forEach(sentence => {
+        if (sentence.length > MAX_CHUNK_LENGTH) {
+          if (current) {
+            output.push(current.trim());
+            current = '';
+          }
+          const parts = sentence.match(new RegExp('.{1,' + MAX_CHUNK_LENGTH + '}(\\s|$)', 'g')) || [sentence];
+          parts.forEach(part => output.push(part.trim()));
+          return;
+        }
+
+        if ((current + ' ' + sentence).trim().length > MAX_CHUNK_LENGTH) {
+          if (current) output.push(current.trim());
+          current = sentence;
+        } else {
+          current = (current + ' ' + sentence).trim();
+        }
+      });
+
+      if (current) output.push(current.trim());
+      return output;
+    }
+
+    function setStatus(message, state = 'Idle') {
+      els.status.innerHTML = message;
+      els.stateStat.textContent = state;
+    }
+
+    function updateProgress() {
+      const total = chunks.length;
+      const done = total ? Math.min(currentIndex, total) : 0;
+      const percent = total ? Math.round((done / total) * 100) : 0;
+      els.chunkStat.textContent = `${Math.min(currentIndex + (isPlaying ? 1 : 0), total)} / ${total}`;
+      els.percentStat.textContent = `${percent}%`;
+      els.fill.style.width = `${percent}%`;
+    }
+
+    function updateTextCount() {
+      const text = els.text.value.trim();
+      const words = text ? text.split(/\s+/).filter(Boolean).length : 0;
+      els.textCount.textContent = `${words.toLocaleString()} words · ${text.length.toLocaleString()} characters`;
+    }
+
+    function selectedVoice() {
+      const uri = els.voice.value;
+      return voices.find(v => v.voiceURI === uri) || voices.find(v => /samantha|ava|allison|susan|victoria|karen|serena|daniel/i.test(v.name)) || voices[0] || null;
+    }
+
+    function loadVoices() {
+      voices = window.speechSynthesis ? speechSynthesis.getVoices() : [];
+      els.voice.innerHTML = '';
+
+      if (!('speechSynthesis' in window)) {
+        els.voice.innerHTML = '<option value="">Speech not supported</option>';
+        setStatus('<strong>Speech not supported.</strong> This browser does not expose speechSynthesis.', 'Error');
+        return;
+      }
+
+      if (!voices.length) {
+        els.voice.innerHTML = '<option value="">Loading voices...</option>';
+        return;
+      }
+
+      voices
+        .slice()
+        .sort((a, b) => {
+          const aScore = /samantha|ava|allison|susan|victoria|karen|serena|daniel/i.test(a.name) ? -1 : 0;
+          const bScore = /samantha|ava|allison|susan|victoria|karen|serena|daniel/i.test(b.name) ? -1 : 0;
+          return aScore - bScore || a.lang.localeCompare(b.lang) || a.name.localeCompare(b.name);
+        })
+        .forEach(v => {
+          const opt = document.createElement('option');
+          opt.value = v.voiceURI;
+          opt.textContent = `${v.name} · ${v.lang}${v.localService ? ' · local' : ''}`;
+          els.voice.appendChild(opt);
+        });
+
+      const saved = readSettings();
+      const preferred = saved.voiceURI || (voices.find(v => /samantha|ava|allison|susan|victoria|karen|serena|daniel/i.test(v.name)) || voices[0]).voiceURI;
+      if ([...els.voice.options].some(o => o.value === preferred)) els.voice.value = preferred;
+    }
+
+    async function requestWakeLock() {
+      if (!('wakeLock' in navigator)) return false;
+      try {
+        wakeLock = await navigator.wakeLock.request('screen');
+        return true;
+      } catch (_) {
+        wakeLock = null;
+        return false;
+      }
+    }
+
+    async function releaseWakeLock() {
+      try {
+        if (wakeLock) await wakeLock.release();
+      } catch (_) {}
+      wakeLock = null;
+    }
+
+    function speakCurrentChunk() {
+      if (isStopped || currentIndex >= chunks.length) {
+        finishPlayback();
+        return;
+      }
+
+      const utterance = new SpeechSynthesisUtterance(chunks[currentIndex]);
+      const voice = selectedVoice();
+      if (voice) utterance.voice = voice;
+      utterance.rate = Number(els.rate.value);
+      utterance.pitch = Number(els.pitch.value);
+      utterance.volume = Number(els.volume.value);
+      utterance.lang = voice?.lang || 'en-US';
+
+      utterance.onstart = () => {
+        isPlaying = true;
+        setStatus(`<strong>Playing.</strong> Chunk ${currentIndex + 1} of ${chunks.length}. Keep this page open for the most reliable playback.`, 'Playing');
+        updateProgress();
+      };
+
+      utterance.onend = () => {
+        if (isStopped) return;
+        currentIndex += 1;
+        updateProgress();
+        setTimeout(speakCurrentChunk, 120);
+      };
+
+      utterance.onerror = event => {
+        if (isStopped) return;
+        setStatus(`<strong>Playback issue.</strong> ${event.error || 'Unknown speech error'}. Press Resume or Play again.`, 'Issue');
+        isPlaying = false;
+      };
+
+      speechSynthesis.speak(utterance);
+    }
+
+    async function play() {
+      if (!('speechSynthesis' in window)) {
+        setStatus('<strong>Speech unavailable.</strong> Try Safari on iPhone or another modern browser.', 'Error');
+        return;
+      }
+
+      const clean = normalizeText(els.text.value);
+      chunks = splitIntoChunks(clean);
+      currentIndex = 0;
+      isStopped = false;
+
+      if (!chunks.length) {
+        setStatus('<strong>No text found.</strong> Paste a script first.', 'Idle');
+        updateProgress();
+        return;
+      }
+
+      speechSynthesis.cancel();
+      saveSettings();
+      const locked = await requestWakeLock();
+      speakCurrentChunk();
+      setStatus(`<strong>Starting.</strong> ${chunks.length} safe chunks prepared.${locked ? ' Wake lock active.' : ' Wake lock unavailable on this device; keep the page open.'}`, 'Starting');
+    }
+
+    function pause() {
+      if (!('speechSynthesis' in window)) return;
+      speechSynthesis.pause();
+      isPlaying = false;
+      setStatus('<strong>Paused.</strong> Press Resume to continue.', 'Paused');
+      updateProgress();
+    }
+
+    function resume() {
+      if (!('speechSynthesis' in window)) return;
+      isStopped = false;
+      speechSynthesis.resume();
+      isPlaying = true;
+      setStatus('<strong>Resumed.</strong> Continuing playback.', 'Playing');
+      updateProgress();
+    }
+
+    async function stop() {
+      isStopped = true;
+      isPlaying = false;
+      if ('speechSynthesis' in window) speechSynthesis.cancel();
+      await releaseWakeLock();
+      setStatus('<strong>Stopped.</strong> Press Play to restart from the beginning.', 'Stopped');
+      updateProgress();
+    }
+
+    async function finishPlayback() {
+      isStopped = true;
+      isPlaying = false;
+      currentIndex = chunks.length;
+      updateProgress();
+      await releaseWakeLock();
+      setStatus('<strong class="ok">Finished.</strong> The full script has been read.', 'Done');
+    }
+
+    function readSettings() {
+      try { return JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}'); }
+      catch { return {}; }
+    }
+
+    function saveSettings() {
+      const settings = {
+        voiceURI: els.voice.value,
+        rate: els.rate.value,
+        pitch: els.pitch.value,
+        volume: els.volume.value
+      };
+      localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+    }
+
+    function applySettings() {
+      const settings = readSettings();
+      if (settings.rate) els.rate.value = settings.rate;
+      if (settings.pitch) els.pitch.value = settings.pitch;
+      if (settings.volume) els.volume.value = settings.volume;
+      updateSliderLabels();
+    }
+
+    function updateSliderLabels() {
+      els.rateValue.textContent = Number(els.rate.value).toFixed(2);
+      els.pitchValue.textContent = Number(els.pitch.value).toFixed(2);
+      els.volumeValue.textContent = Number(els.volume.value).toFixed(2);
+    }
+
+    function saveScript() {
+      localStorage.setItem(STORAGE_KEY, els.text.value);
+      saveSettings();
+      setStatus('<strong>Saved.</strong> Script and voice settings saved on this iPhone/browser.', 'Saved');
+    }
+
+    function loadScript() {
+      const saved = localStorage.getItem(STORAGE_KEY) || '';
+      els.text.value = saved;
+      updateTextCount();
+      setStatus(saved ? '<strong>Loaded.</strong> Saved script restored.' : '<strong>No saved script.</strong> Nothing has been saved yet.', saved ? 'Loaded' : 'Idle');
+    }
+
+    function clearScript() {
+      stop();
+      els.text.value = '';
+      updateTextCount();
+      setStatus('<strong>Cleared.</strong> Text box is empty. Saved script was not deleted.', 'Cleared');
+    }
+
+    els.play.addEventListener('click', play);
+    els.pause.addEventListener('click', pause);
+    els.resume.addEventListener('click', resume);
+    els.stop.addEventListener('click', stop);
+    els.save.addEventListener('click', saveScript);
+    els.load.addEventListener('click', loadScript);
+    els.clear.addEventListener('click', clearScript);
+    els.text.addEventListener('input', updateTextCount);
+
+    [els.voice, els.rate, els.pitch, els.volume].forEach(el => {
+      el.addEventListener('change', () => { updateSliderLabels(); saveSettings(); });
+      el.addEventListener('input', () => { updateSliderLabels(); saveSettings(); });
+    });
+
+    document.addEventListener('visibilitychange', async () => {
+      if (document.visibilityState === 'visible' && isPlaying) await requestWakeLock();
+    });
+
+    window.addEventListener('beforeunload', () => {
+      if ('speechSynthesis' in window) speechSynthesis.cancel();
+    });
+
+    applySettings();
+    updateTextCount();
+    updateProgress();
+    loadVoices();
+    if ('speechSynthesis' in window) {
+      speechSynthesis.onvoiceschanged = loadVoices;
+      setTimeout(loadVoices, 300);
+      setTimeout(loadVoices, 1000);
+    }
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./service-worker.js').catch(() => {});
+      });
+    }
+  </script>
+</body>
+</html>
