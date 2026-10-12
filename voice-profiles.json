@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "updated": "2026-10-12",
+  "profiles": {
+    "bible": {
+      "name": "Bible / Bedtime Reading",
+      "delivery": "generated_audio",
+      "provider_profile": "AI Voice Generator",
+      "voice_id": "deep",
+      "voice_description": "Approved calm American male-style voice; warm, natural, slightly deep, sleep-friendly.",
+      "device_tts_fallback": false,
+      "notes": "Use the approved Deep generated-audio voice for Bible readings on iPhone and MacBook. Do not silently substitute browser/iOS/macOS speechSynthesis."
+    },
+    "cast25": {
+      "name": "Cast25",
+      "preserve_current_voice": true,
+      "notes": "Keep the existing Cast25 female voice and current generated-audio workflow unchanged."
+    }
+  }
+}
