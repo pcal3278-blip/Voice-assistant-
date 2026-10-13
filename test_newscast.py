@@ -1,18 +1,35 @@
-# test_newscast.py
-
 import unittest
-from newscast import Newscast  # Adjust the import based on your project structure
+from unittest.mock import Mock, patch
 
-class TestNewscast(unittest.TestCase):
+from newscast_module import NewscastManager
 
+
+class TestNewscastManager(unittest.TestCase):
     def setUp(self):
-        self.newscast = Newscast()  # Initialize the Newscast module
+        self.manager = NewscastManager()
 
-    def test_example_usage(self):
-        # Replace with actual example usage of the Newscast module
-        result = self.newscast.example_method()  # Replace with actual method call
-        expected = 'Expected Output'  # Replace with the expected output
-        self.assertEqual(result, expected)
+    @patch("newscast_module.requests.get")
+    def test_fetch_news_headlines(self, mock_get):
+        good_response = Mock(status_code=200)
+        good_response.json.return_value = {"headlines": ["h1", "h2"]}
+        mock_get.return_value = good_response
 
-if __name__ == '__main__':
+        data = self.manager.fetch_news_headlines()
+        self.assertEqual(data["ABC"], ["h1", "h2"])
+
+    @patch("newscast_module.requests.get")
+    def test_fetch_weather_data(self, mock_get):
+        good_response = Mock(status_code=200)
+        good_response.json.return_value = {"weather": {"temp": 70}}
+        mock_get.return_value = good_response
+
+        data = self.manager.fetch_weather_data("NYC")
+        self.assertEqual(data, {"temp": 70})
+
+    def test_fetch_weather_data_invalid_county(self):
+        with self.assertRaises(ValueError):
+            self.manager.fetch_weather_data("InvalidCounty")
+
+
+if __name__ == "__main__":
     unittest.main()
